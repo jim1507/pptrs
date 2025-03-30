@@ -94,7 +94,8 @@ include 'template/header.php';
         END
     ) AS Team_Leader_Name, 
     COUNT(hp.house_id) AS total_houses_sold,
-    t.TeamID
+    t.TeamID, 
+    a.Agent_infoID 
 FROM 
     tbl_team t
 LEFT JOIN 

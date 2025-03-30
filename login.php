@@ -43,7 +43,7 @@
             <img class="mx-auto size-13" src="images/icon.png" alt="logo">
             <div class="mt-4">
               <h2 class="text-2xl font-semibold text-slate-600 dark:text-navy-100">
-                Welcome Back
+                PARAKALAN
               </h2>
               <p class="text-slate-400 dark:text-navy-300">
                 Please sign in to continue
@@ -87,7 +87,7 @@
     <style>
     /* Background Styling */
     .content-wrapper {
-      background: url('images/bg.png') no-repeat center center fixed;
+      background: url('images/bg2.png') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
       display: flex;

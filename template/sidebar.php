@@ -22,7 +22,7 @@
                 <div x-data="usePopper({placement:'right-end',offset:12})"
                     @click.outside="isShowPopper && (isShowPopper = false)" class="flex">
                     <button @click="isShowPopper = !isShowPopper" x-ref="popperRef" class="avatar size-12">
-                        <img class="rounded-full" src="images/avatar/avatar-12.jpg" alt="avatar">
+                        <img class="rounded-full" src="images/avatar/avatar-21.jpg" alt="avatar">
                         <span
                             class="absolute right-0 size-3.5 rounded-full border-2 border-white bg-success dark:border-navy-700"></span>
                     </button>
@@ -33,7 +33,7 @@
                             <div
                                 class="flex items-center space-x-4 rounded-t-lg bg-slate-100 py-5 px-4 dark:bg-navy-800">
                                 <div class="avatar size-14">
-                                    <img class="rounded-full" src="images/avatar/avatar-12.jpg" alt="avatar">
+                                    <img class="rounded-full" src="images/avatar/avatar-21.jpg" alt="avatar">
                                 </div>
                                 <div>
                                     <a href="#"

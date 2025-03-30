@@ -63,58 +63,57 @@ include 'template/header.php';
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-slate-200 dark:divide-navy-700">
-                                        <?php
-                                        // Check if TeamID is set
-                                        if (isset($_GET['team_id']) && !empty($_GET['team_id'])) {
-                                            // Sanitize the input to prevent XSS and SQL injection
-                                            $teamID = htmlspecialchars($_GET['team_id']);
+<?php
+// Check if TeamID is set
+if (isset($_GET['team_id']) && !empty($_GET['team_id'])) {
+    // Sanitize input
+    $teamID = intval($_GET['team_id']); // use intval to sanitize as integer
 
-                                            $sql = "SELECT 
-    h.HouseName, 
-    GROUP_CONCAT(CONCAT(c.FN, ' ', c.MN, '. ', c.LN) SEPARATOR ', ') AS customerName,
-    GROUP_CONCAT(CONCAT(ai.FN, ' ', ai.MN, '. ', ai.LN) SEPARATOR ', ') AS AgentName
-FROM 
-    house_purchase hp
-INNER JOIN 
-    tbl_customer c ON hp.customer_id = c.customer_id
-LEFT JOIN 
-    tbl_house h ON hp.house_id = h.HouseID
-LEFT JOIN 
-    tbl_acc_agent ac ON hp.agentID = ac.Agent_accID
-LEFT JOIN 
-    tbl_agents_info ai ON ac.AgentInfo_Id = ai.Agent_infoID
-LEFT JOIN 
-    tbl_team t ON ai.AgentTeam_ID = t.TeamID
-        WHERE ai.AgentTeam_ID = $teamID
-GROUP BY 
-    h.HouseName";
+    // Updated query to show one row per customer
+    $sql = "SELECT 
+                h.HouseName, 
+                CONCAT(c.FN, ' ', c.MN, '. ', c.LN) AS customerName,
+                CONCAT(ai.FN, ' ', ai.MN, '. ', ai.LN) AS agentName
+            FROM 
+                house_purchase hp
+            INNER JOIN 
+                tbl_customer c ON hp.customer_id = c.customer_id
+            LEFT JOIN 
+                tbl_house h ON hp.house_id = h.HouseID
+            LEFT JOIN 
+                tbl_acc_agent ac ON hp.agentID = ac.Agent_accID
+            LEFT JOIN 
+                tbl_agents_info ai ON ac.AgentInfo_Id = ai.Agent_infoID
+            LEFT JOIN 
+                tbl_team t ON ai.AgentTeam_ID = t.TeamID
+            WHERE ai.AgentTeam_ID = $teamID";
 
-                                                
-                                            $result = mysqli_query($con, $sql);
-                                            $count = 1; // Initialize counter
+    $result = mysqli_query($con, $sql);
+    $count = 1;
 
-                                            if (mysqli_num_rows($result) > 0) {
-                                                while ($row = mysqli_fetch_assoc($result)) {
-                                                    $customername = isset($row['customerName']) ? htmlspecialchars($row['customerName']) : 'N/A';
-                                                    $agentname = isset($row['AgentName']) ? htmlspecialchars($row['AgentName']) : 'N/A';
-                                                    $housename = isset($row['HouseName']) ? htmlspecialchars($row['HouseName']) : 'N/A';
-                                        ?>
-                                        <tr class="hover:bg-slate-100 dark:hover:bg-navy-700">
-                                            <td class="px-6 py-4"><?php echo $count++; ?></td>
-                                            <td class="px-6 py-4"><?php echo $housename; ?></td>
-                                            <td class="px-6 py-4"><?php echo $customername; ?></td>
-                                            <td class="px-6 py-4"><?php echo $agentname; ?></td>
-                                        </tr>
-                                        <?php
-                                                }
-                                            } else {
-                                                echo "<tr><td colspan='4' class='text-center px-6 py-4 text-slate-500'>No data available</td></tr>";
-                                            }
-                                        } else {
-                                            echo "<tr><td colspan='4' class='text-center px-6 py-4 text-slate-500'>No team selected</td></tr>";
-                                        }
-                                        ?>
-                                    </tbody>
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $customername = htmlspecialchars($row['customerName'] ?? 'N/A');
+            $agentname = htmlspecialchars($row['agentName'] ?? 'N/A');
+            $housename = htmlspecialchars($row['HouseName'] ?? 'N/A');
+?>
+<tr class="hover:bg-slate-100 dark:hover:bg-navy-700">
+    <td class="px-6 py-4"><?php echo $count++; ?></td>
+    <td class="px-6 py-4"><?php echo $housename; ?></td>
+    <td class="px-6 py-4"><?php echo $customername; ?></td>
+    <td class="px-6 py-4"><?php echo $agentname; ?></td>
+</tr>
+<?php
+        }
+    } else {
+        echo "<tr><td colspan='4' class='text-center px-6 py-4 text-slate-500'>No data available</td></tr>";
+    }
+} else {
+    echo "<tr><td colspan='4' class='text-center px-6 py-4 text-slate-500'>No team selected</td></tr>";
+}
+?>
+</tbody>
+
                                 </table>
                             </div>
                         </div>
